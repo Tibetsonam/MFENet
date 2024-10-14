@@ -45,21 +45,6 @@ class decoder_stage(nn.Module):
       
     def forward(self, x):
         return self.layer(x)
-
-
-# class BasicConv2d(nn.Module):
-#     def __init__(self, in_planes, out_planes, kernel_size, stride=1, padding=0,dilation=1):
-#         # padding = (kernel_size - 1) // 2
-#         super(BasicConv2d, self).__init__()
-#         self.conv = nn.Conv2d(in_planes, out_planes, kernel_size=kernel_size, stride=stride,
-#                               padding=padding,dilation=dilation, bias=False)
-#         self.bn = nn.BatchNorm2d(out_planes)
-#         self.relu = nn.ReLU(inplace=True)
-
-#     def forward(self, x):
-#         x = self.conv(x)
-#         x = self.bn(x)
-#         return self.relu(x)
     
 class DepthwiseSeparableConv2d(nn.Module):
     def __init__(self, in_planes, out_planes, kernel_size, stride=1, padding=0, dilation=1):
@@ -136,7 +121,6 @@ class BasicRFB_a(nn.Module):
         out = self.relu(out)
 
         return out
-# StarNet layer 
 class ConvBN(nn.Sequential):
     def __init__(self, in_planes, out_planes, kernel_size=1, stride=1, padding=0, dilation=1, groups=1, with_bn=True):
         super().__init__()
