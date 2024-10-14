@@ -10,9 +10,9 @@ from models.SC_branch import SC_mobie
 import inspect
 
 
-from try_idea.oct import NormalOctaveConv
-from try_idea.edgeenhance import EdgeEnhancedModule
-from try_idea.CA import CoordAtt
+from FDEM.oct import NormalOctaveConv
+from FDEM.edgeenhance import EdgeEnhancedModule
+from FDEM.CA import CoordAtt
 
 class out_block(nn.Module):
     def __init__(self, infilter):
