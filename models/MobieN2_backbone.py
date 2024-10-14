@@ -10,9 +10,9 @@ from models.SC_branch import SC_mobie
 import inspect
 
 
-from try_idea.oct import NormalOctaveConv
-from try_idea.edgeenhance import EdgeEnhancedModule
-from try_idea.CA import CoordAtt
+from FDEM.oct import NormalOctaveConv
+from FDEM.edgeenhance import EdgeEnhancedModule
+from FDEM.CA import CoordAtt
 
 class out_block(nn.Module):
     def __init__(self, infilter):
@@ -23,8 +23,6 @@ class out_block(nn.Module):
         
 
     def forward(self, x, H, W):
-        #对输入的特征图进行双线性插值的上采样操作，以使其大小与指定的目标大小 (H, W) 一致。
-        #将低分辨率的特征图上采样到与输入图像相同的分辨率
         x = F.interpolate(self.conv1(x), (H, W), mode='bilinear', align_corners=True)
         y = self.conv2(x)
         # print(y)
@@ -47,21 +45,6 @@ class decoder_stage(nn.Module):
       
     def forward(self, x):
         return self.layer(x)
-
-
-# class BasicConv2d(nn.Module):
-#     def __init__(self, in_planes, out_planes, kernel_size, stride=1, padding=0,dilation=1):
-#         # padding = (kernel_size - 1) // 2
-#         super(BasicConv2d, self).__init__()
-#         self.conv = nn.Conv2d(in_planes, out_planes, kernel_size=kernel_size, stride=stride,
-#                               padding=padding,dilation=dilation, bias=False)
-#         self.bn = nn.BatchNorm2d(out_planes)
-#         self.relu = nn.ReLU(inplace=True)
-
-#     def forward(self, x):
-#         x = self.conv(x)
-#         x = self.bn(x)
-#         return self.relu(x)
     
 class DepthwiseSeparableConv2d(nn.Module):
     def __init__(self, in_planes, out_planes, kernel_size, stride=1, padding=0, dilation=1):
@@ -138,7 +121,6 @@ class BasicRFB_a(nn.Module):
         out = self.relu(out)
 
         return out
-# StarNet layer 
 class ConvBN(nn.Sequential):
     def __init__(self, in_planes, out_planes, kernel_size=1, stride=1, padding=0, dilation=1, groups=1, with_bn=True):
         super().__init__()
@@ -151,11 +133,6 @@ class ConvBN(nn.Sequential):
 
 def upsample(x, size):
     return F.interpolate(x, size, mode='bilinear', align_corners=True)
-# def change_channel(x, out_channels):
-#         # 添加适当的卷积层来改变通道数\
-#     conv=nn.Conv2d(x.shape[1], out_channels, kernel_size=1).cuda
-#     result = conv(x.cuda())
-#     return result
 class change_channel(nn.Module):
     def __init__(self, in_channel,out_channel):
         super(change_channel, self).__init__()
@@ -189,7 +166,7 @@ class Model(nn.Module):
         # self.catconv4 = DepthwiseSeparableConv2d(128, 64, 3, stride=1, padding=1)
         
         # Fdem mudule
-        self.Oct1 = NormalOctaveConv(0,64,64,64,kernel=3,stride=1,padding=1)		#   L H L H  没有L2L  L2H
+        self.Oct1 = NormalOctaveConv(0,64,64,64,kernel=3,stride=1,padding=1)		#   L H L H  L2L  L2H
         self.Oct2 = NormalOctaveConv(64,64,64,64,kernel=3,stride=1,padding=1)
         self.Oct3 = NormalOctaveConv(64,64,64,64,kernel=3,stride=1,padding=1)
         self.Oct4 = NormalOctaveConv(64,96,0,96,kernel=3,stride=1,padding=1)      
@@ -207,7 +184,7 @@ class Model(nn.Module):
         # self.RFB4 = BasicRFB_a(96,96)  #
         # self.RFB5 = BasicRFB_a(320,320)  #
         #octconv layer
-        # self.Oct1 = OctaveConv(0,64,64,64,kernel=3,stride=1,padding=1)		#   L H L H  没有L2L  L2H
+        # self.Oct1 = OctaveConv(0,64,64,64,kernel=3,stride=1,padding=1)		#   L H L H L2L  L2H
         # self.Oct2 = OctaveConv(64,64,64,64,kernel=3,stride=1,padding=1)
         # self.Oct3 = OctaveConv(0,64,64,64,kernel=3,stride=1,padding=1)
         # self.Oct4 = OctaveConv(64,64,96,96,kernel=3,stride=1,padding=1)      
@@ -281,7 +258,6 @@ class Model(nn.Module):
         r4 = rgb_out4.size()  # 8 96 28 28  
         r5 = rgb_out5.size()  # 8 320 28  28
         
-        # 每个层单独进OCT模块 高频使用目标定位 低频使用边缘强化
         # OCT_1
         i = 0, fusion1 
         X_l,X_h = self.Oct1(i)
@@ -291,8 +267,8 @@ class Model(nn.Module):
         X_l = nn.AdaptiveAvgPool2d((56, 56))(X_l)
         i = X_l, fusion2 
         X_l,X_h = self.Oct2(i) 
-        edge_feature,f1_edge = self.edge(X_l)                   # 64 112 112 和decoder部分相加  1 112 112 
-        edge_up1 = self.out1(edge_feature, 448, 448) # 1 224 224 返回做边缘监督
+        edge_feature,f1_edge = self.edge(X_l)                  
+        edge_up1 = self.out1(edge_feature, 448, 448) 
         # X_l = edge_feature
         X_h = self.ca2(X_h)
         fusion2 = fusion2 + X_h
@@ -300,8 +276,8 @@ class Model(nn.Module):
         X_l = nn.AdaptiveAvgPool2d((28, 28))(X_l)
         i = X_l, fusion3 
         X_l,X_h = self.Oct3(i) 
-        edge_feature,f1_edge = self.edge(X_l)                   # 64 112 112 和decoder部分相加  1 112 112 
-        edge_up2 = self.out1(edge_feature, 448, 448) # 1 224 224 返回做边缘监督
+        edge_feature,f1_edge = self.edge(X_l)                  
+        edge_up2 = self.out1(edge_feature, 448, 448) 
         # X_l = edge_feature
         X_h = self.ca3(X_h)
         fusion3 = fusion3 + X_h
