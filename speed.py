@@ -43,8 +43,8 @@ def computeTime(model, device='cuda'):
     
     #Calculate FLOPs and model parameters
     macs, params = profile(model, inputs=(inputs,flow,depth,))
-    print(f"FLOPS: {macs / 1e9:.3f} GFLOPS")  # 转换为Giga FLOPS
-    print(f"Params: {params / 1e6:.2f} M")  # 转换为百万
+    print(f"FLOPS: {macs / 1e9:.3f} GFLOPS")  
+    print(f"Params: {params / 1e6:.2f} M")  
     macs, params = clever_format([macs, params], "%.3f")
     print("MACs (FLOPs):", macs)
     print("Number of parameters:", params)
