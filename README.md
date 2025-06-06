@@ -2,7 +2,7 @@
 
 [ICASSP 2025: Lightweight Multi-Frequency Enhancement Network for RGB-D Video Salient Object Detection](https://ieeexplore.ieee.org/stamp/stamp.jsp?tp=&arnumber=10890388)
 
-This repository contains full training & testing code, and pretrained saliency maps. our method achieves competitive accuracy compared to nonefficient models, running at 80 FPS on a GPU with only 4.75M parameters.
+This repository contains full training & testing code, and pretrained models. our method achieves competitive accuracy compared to nonefficient models, running at 80 FPS on a GPU with only 4.75M parameters.
 
 If you run into any problems or feel any difficulties to run this code, do not hesitate to leave issues in this repository.
 
