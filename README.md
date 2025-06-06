@@ -17,181 +17,85 @@ Daerji Suolang, Jiahao He, Wangchuk Tsering, Keren Fu, Xiaofeng Li, Qijun Zhao
      Block diagram of MFENet.
     </em>
 </p>
-This repository contains:
 
-- [x] Full code, data, pretrained models for `training` and `testing`
-- [x] MobileSal deployment, achieving 420FPS (fp32) and 800FPS (fp16) with `batch size 1` on a single RTX 2080Ti.
-
-* [Requirements](#requirements)
-  * [PyTorch](#pytorch)
-  * [Jittor](#jittor)
-  * [Deployment](#deployment)
-* [`Data Preparing`](#data-preparing)
-* [`Train`](#train)
-* [`Test`](#test)
-  * [Pretrained Models](#pretrained-models)
-  * [Generate Saliency Maps](#generate-saliency-maps)
-  * [Deployment](#deployment-1)
-  * [Speed Test](#speed-test)
-  * [`Pretrained Saliency maps`](#pretrained-saliency-maps)
-* [Others](#others)
-  * [TODO](#todo)
-  * [Contact](#contact)
-  * [License](#license)
-  * [Citation](#citation)
-  * [Acknowlogdement](#acknowlogdement)
+## The most Lightweight RGB-D VSOD method &#x26A1;
+- Low model size: Model size is only **16.39Mb**.
+- High accuracy: SOTA performance on 2 new RGB-D VSOD datasets (RDVS, DVisal), and second performance on new RGB-D VSOD dataset(ViDSOD-100).
+- High Speed: running at 80 FPS on a Titan X Pascal GPU.
+<p align="center">
+    <img src="images/QUANTITATIVE.png" width="80%"/> <br />
+ <em> 
+     QUANTITATIVE RESULTS OF MFENet.
+    </em>
+</p>
 
 ### Requirements
 
-#### PyTorch 
+- Python 3.7
+- Pytorch 1.6.0
+- Torchvision 0.7.0
+- Cuda 9.2
+- Ubuntu16.04
 
-* Python 3.6+
-* PyTorch >=0.4.1, OpenCV-Python
-* Tested on PyTorch 1.7.1
-
-#### Jittor
-
-* Python 3.7+
-* Jittor, OpenCV-Python
-* Tested on Jittor 1.3.1
-
-#### Deployment
-
-* [torch2trt](https://github.com/NVIDIA-AI-IOT/torch2trt)
-
-For Jittor users, we create a branch `jittor`. So please run the following command first:
-
-````
-git checkout jittor
-````
-
-To install MobileSal, please run:
-
-````
-pip install -r envs/requirements.txt
-````
 
 ### Data Preparing
 
 Before training/testing our network, please download the training data: 
 
-* Preprocessed data of 6 datasets: [[Google Drive]](https://drive.google.com/file/d/1czlZyW9_6k3ueS--TDAZK6M7Uv6FpUfO/view?usp=sharing), [[Baidu Pan, 9nxi]](https://pan.baidu.com/s/1a71BlcvX0MTBuP_GGd84WA)
-
+* Download the VSOD DATASETS. (containing DAVIS and DAVSOD) from [Baidu Driver](https://pan.baidu.com/s/1mVtAWJS0eC690nPXav2lwg) (PSW: 7yer).
+* Download the RGB-D DATASETS. (containing NJU2K and NLPR) from [Baidu Driver](https://pan.baidu.com/s/1wI-bxarzdSrOY39UxZaomQ) [PSW: 940i].
+* Download the datasets (RDVS and DVisal) from [Baidu Driver](https://pan.baidu.com/s/1vYEDy4uPbbB20Cvik-oriQ) (PSW: d4ew).
 
 Note: if you are blocked by Google and Baidu services, you can contact me via e-mail and I will send you a copy of data and model weights.
 
 We have processed the data well so you can use them without any preprocessing steps. 
-After completion of downloading, extract the data and put them to `./data/` folder.
-Then, the `./datasets/` folder should contain six folders: `NJU2K/, NLPR/, STERE/, SSD/, SIP/, DUT-RGBD/`, representing `NJU2K, NLPR, STEREO, SSD, SIP, DUTLF-D` datasets, respectively.
-
+After completion of downloading, extract the datasets and and save it at './dataset/'. 
 
 ### Train
 
 It is very simple to train our network. We have prepared a script to run the training step:
 ```
-bash ./tools/train.sh
+python trainMobie2.py
 ```
 
 ### Test
+1. Download the trained model from [[Google Drive]](https://drive.google.com/drive/folders/1QsDPV3cCHoIAnTjnyWl4hRQIjDhoflkW?usp=drive_link) and modify the  `model_path` to its saving path in the `test.py`.
 
-
-#### Pretrained Models
-
-As in our paper, we train our model on the NJU2K_NLPR training set, and test our model on NJU2K_test, NLPR_test, STEREO, SIP, and SSD datasets. For DUTLF-D, we train our model on DUTLF-D training set and evaluate on its testing test.
-
-(Default) Trained on NJU2K_NLPR training set: 
-* Single-scale Training: [[Google Drive]](https://drive.google.com/file/d/1dfyFkdsI1rOfmhmgG-o45ggnOj5Wpr1d/view?usp=sharing), [[Baidu Pan, 9nxi]](https://pan.baidu.com/s/1a71BlcvX0MTBuP_GGd84WA)
-* Multi-scale Training: [[Google Drive]](https://drive.google.com/file/d/1WTRxxO78wx48F3ItfXG8vbSL4IvWanyr/view?usp=sharing), [[Baidu Pan, 9nxi]](https://pan.baidu.com/s/1a71BlcvX0MTBuP_GGd84WA)
-
-(Custom) Training on DUTLF-D training set:
-* Multi-scale Training: [[Google Drive]](https://drive.google.com/file/d/1L26kN_sZkLVDBzh_NOCB-ajkrGJdIovi/view?usp=sharing), [[Baidu Pan, 9nxi]](https://pan.baidu.com/s/1a71BlcvX0MTBuP_GGd84WA)
-
-Download them and put them into the `pretrained/` folder.
+2. Run `python test.py` in the terminal.
 
 
 #### Generate Saliency Maps
 
-After preparing the pretrained models, it is also very simple to generate saliency maps via MobileSal:
+After preparing the pretrained models, it is also very simple to generate saliency maps via MFENet:
 
 ```
-bash ./tools/test.sh
+Run `python test.py` in the terminal.
 ```
 
 The scripts will automatically generate saliency maps on the `maps/` directory.
 
-#### Deployment
-
-The deployment largely speeds up MobileSal with batch size of 1.
-An example script is located at: `tools/test_trt.sh`. Run:
-
-```
-bash ./tools/test_trt.sh
-```
-
-This script will automatically convert PyTorch MobileSal to TensorRT-based MobileSal. Then it will generate saliency maps via the TensorRT-based MobileSal.
-On deployment for real-world applications, you can load the converted TensorRT MobileSal for inference:
-
-```
-from torch2trt import torch2trt, TRTModule
-model = TRTModule(); trt_model_path = "pretrained/mobilesal_trt.pth"
-model.load_state_dict(torch.load(trt_model_path))
-result = model(image, depth) # get result with [torch.Tensor] input
-```
 
 #### Speed Test
-We provide a speed test script on MobileSal:
+We provide a speed test script on MFENet:
 
 ```
 python speed_test.py
 ```
 
-The speed result on a single RTX 2080Ti is as below:
-
-|     Type     | Input  Size    | Batch Size | FP16 | FPS | 
-|-----------------|:---------:|:-----:|:-----:|:-----------:|
-| PyTorch   | 320 x 320 |  20 |  No |     450    |     
-| TensorRT | 320 x 320 |  1 |  No |     420    |    
-| TensorRT | 320 x 320 |  1 |  Yes |     800    |     
-
-
-#### Pretrained Saliency maps
-
-For covenience, we provide the pretrained saliency maps on several datasets as below:
-
-* Single-scale Training: [[Google Drive]](https://drive.google.com/file/d/1UA7zZmMO1Js0Jh9VQwo5JjYRF3qX0y0N/view?usp=sharing), [[Baidu Pan, 9nxi]](https://pan.baidu.com/s/1a71BlcvX0MTBuP_GGd84WA)
-
-* Multi-scale Training: [[Google Drive]](https://drive.google.com/file/d/1-vwtUPh3UWez963IyZNO6HZkGdC3GusL/view?usp=sharing), [[Baidu Pan, 9nxi]](https://pan.baidu.com/s/1a71BlcvX0MTBuP_GGd84WA)
-
 ### Others 
-
-#### TODO
-
-1. Release the pretrained models and saliency maps on COME15K dataset.
-2. Add results with the [P2T](https://arxiv.org/abs/2106.12011) transformer backbone.
-
-#### Contact
-
-* I encourage everyone to contact me via my e-mail. My e-mail is: wuyuhuan @ mail.nankai (dot) edu.cn
-
-#### License
-
-The code is released under the [Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International Public License](https://creativecommons.org/licenses/by-nc-sa/4.0/legalcode) for NonCommercial use only.
-
 
 #### Citation
 
 If you are using the code/model/data provided here in a publication, please consider citing our work:
 
 ````
-@ARTICLE{wu2021mobilesal,
-  author={Wu, Yu-Huan and Liu, Yun and Xu, Jun and Bian, Jia-Wang and Gu, Yu-Chao and Cheng, Ming-Ming},
-  journal={IEEE Transactions on Pattern Analysis and Machine Intelligence}, 
-  title={MobileSal: Extremely Efficient RGB-D Salient Object Detection}, 
-  year={2022},
-  volume={44},
-  number={12},
-  pages={10261--10269},
-  doi={10.1109/TPAMI.2021.3134684}
+@inproceedings{suolang2025lightweight,
+  title={Lightweight Multi-Frequency Enhancement Network for RGB-D Video Salient Object Detection},
+  author={Suolang, Daerji and He, Jiahao and Tsering, Wangchuk and Fu, Keren and Li, Xiaofeng and Zhao, Qijun},
+  booktitle={ICASSP 2025-2025 IEEE International Conference on Acoustics, Speech and Signal Processing (ICASSP)},
+  pages={1--5},
+  year={2025},
+  organization={IEEE}
 }
 ````
 
@@ -202,6 +106,3 @@ This repository is built under the help of the following five projects for acade
 
 * [PyTorch](https://github.com/pytorch/pytorch)
 
-* [Jittor](https://github.com/Jittor/jittor)
-
-* [torch2trt](https://github.com/NVIDIA-AI-IOT/torch2trt)
