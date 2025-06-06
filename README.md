@@ -1,123 +1,201 @@
-# MFE-Net (ICASSP 2025)
-Official repository for paper [Lightweight Multi-Frequency Enhancement Network for RGB-D Video Salient Object Detection](https://ieeexplore.ieee.org/stamp/stamp.jsp?tp=&arnumber=10890388) 
+# MFENet
 
-## News
-- 6/Jun/2022🔥[online demo](http://rgbdsod-krf.natapp4.cc/) is newly realeased!
-- 8/Aug/2022 we extend DFM-Net to Video Salient Object Detection task, which refers to [Depth Quality-Inspired Feature Manipulation for Efficient RGB-D and Video Salient Object Detection](https://arxiv.org/abs/2208.03918)
+[ICASSP 2025: 
+MFENet: Lightweight Multi-Frequency Enhancement Network for RGB-D Video Salient Object Detection](https://ieeexplore.ieee.org/stamp/stamp.jsp?tp=&arnumber=10890388)
 
+This repository contains full training & testing code, and pretrained saliency maps. our method achieves competitive accuracy compared to nonefficient models, running at 80 FPS on a GPU with only 4.75M parameters.
 
+If you run into any problems or feel any difficulties to run this code, do not hesitate to leave issues in this repository.
 
+My e-mail is:  tibesonam@gmail.com
 
-<p align="center">
-    <img src="https://ieeexplore.ieee.org/mediastore/IEEE/content/media/10887540/10887541/10890388/suola1-p5-suola-large.gif" width="80%"/> <br />
- <em> 
-     Block diagram of DFM-Net.
-    </em>
-</p>
+[[PDF]](https://ieeexplore.ieee.org/stamp/stamp.jsp?tp=&arnumber=10890388)
 
+This repository contains:
 
-## The most efficient RGB-D SOD method &#x26A1;
-- Low model size: Model size is only **8.5Mb**, being **6.7/3.1 smaller** than the latest lightest models A2dele and MobileSal.
-- High accuracy: SOTA performance on 9 datasets (NJU2K, NLPR, STERE, RGBD135, LFSD, SIP, DUT-RGBD, RedWeb-S, COME). 
-- High Speed: Cost 50ms on CPU (Core i7-8700 CPU), being **2.9/2.4 faster** than the latest fastest models A2dele and MobileSal.
+- [x] Full code, data, pretrained models for `training` and `testing`
+- [x] MobileSal deployment, achieving 420FPS (fp32) and 800FPS (fp16) with `batch size 1` on a single RTX 2080Ti.
 
-<p align="center">
-    <img src="img/benchmark_vis_IJCV.png" width="60%"/> <br />
- <em> 
-      Performance visualization. Performance visualization. The vertical axis indicates the average S-measure over six widely used datasets (NJU2K, NLPR, STERE, RGBD135, LFSD, SIP). The horizontal axis indicates CPU speed. The circle area is proportional to the model size. 
-    </em>
-</p>
+* [Requirements](#requirements)
+  * [PyTorch](#pytorch)
+  * [Jittor](#jittor)
+  * [Deployment](#deployment)
+* [`Data Preparing`](#data-preparing)
+* [`Train`](#train)
+* [`Test`](#test)
+  * [Pretrained Models](#pretrained-models)
+  * [Generate Saliency Maps](#generate-saliency-maps)
+  * [Deployment](#deployment-1)
+  * [Speed Test](#speed-test)
+  * [`Pretrained Saliency maps`](#pretrained-saliency-maps)
+* [Others](#others)
+  * [TODO](#todo)
+  * [Contact](#contact)
+  * [License](#license)
+  * [Citation](#citation)
+  * [Acknowlogdement](#acknowlogdement)
 
+### Requirements
 
-##  Extension :fire:
-[Depth Quality-Inspired Feature Manipulation for Efficient RGB-D and Video Salient Object Detection](https://arxiv.org/abs/2208.03918)
-- More comprehensive comparison: 
-  - Benchmark results on DUT-RGBD, RedWeb-S, COME are updated. 
-  - Metric of maximum-batch inference speed is added.
-  - We re-test the inference speed of ours and compared methods on Ubuntu 16.04.
-- Working mechanism explanation 
-  - Further analyses verify the ability of DQFM in distinguishing depth maps of various qualities without any quality labels.
-- Application on efficient VSOD
-  - One of the lightest VSOD methods! 
-  - Joint training strategy is proposed.
+#### PyTorch 
 
+* Python 3.6+
+* PyTorch >=0.4.1, OpenCV-Python
+* Tested on PyTorch 1.7.1
 
+#### Jittor
 
-## Easy-to-use to boost your RGB-D SOD network
-If you use a depth branch as an affiliate to the RGB branch:
-- Use DQW/DHA to boost performance with extra 0.007/0.042Mb model size increased
-- Use our light-weight depth backbone to improve efficiency
+* Python 3.7+
+* Jittor, OpenCV-Python
+* Tested on Jittor 1.3.1
 
-if you adopt parallel encoders for RGB and depth:
-- refer to our other work [BTS-Net](https://github.com/zwbx/BTS-Net)
+#### Deployment
 
+* [torch2trt](https://github.com/NVIDIA-AI-IOT/torch2trt)
 
+For Jittor users, we create a branch `jittor`. So please run the following command first:
 
+````
+git checkout jittor
+````
 
-## Test
+To install MobileSal, please run:
 
-Directly run test.py
-    
-    The test maps will be saved to './resutls/'.
-    
-data preparation
- - Classic benchmark: training on NJU2K and NLPR and test on NJU2K, NLPR, STERE, RGBD135, LFSD, SIP. 
-   - [test data](https://pan.baidu.com/s/1wI-bxarzdSrOY39UxZaomQ) [code: 940i]
-   - [pretrained model for DFMNet](https://pan.baidu.com/s/1pTEByo0OngNJlKCJsTcx-A?pwd=skin)
-   - Additional test datasets [RedWeb-S](https://github.com/nnizhang/SMAC) &#x1F195;, updated in journal version.
- - DUT-RGBD benchmark &#x1F195;
-   - Download the training and test data in [official repository](https://pan.baidu.com/s/1mhHAXLgoqqLQIb6r-k-hbA). 
-   - [pretrained model for DFMNet](https://pan.baidu.com/s/1GJHvxh2gTLutpM1hfESDNg?pwd=nmw3).
- - COME benchmark &#x1F195;
-   - Download the training and test data in [official repository](https://github.com/JingZhang617/cascaded_rgbd_sod).
-   - [pretrained model for DFMNet](https://pan.baidu.com/s/1fCYF5p9dCC8RXRCLaWUQlg?pwd=iqyf).
+````
+pip install -r envs/requirements.txt
+````
 
-## Results
+### Data Preparing
 
-- We provide testing results of 9 datasets (NJU2K, NLPR, STERE, RGBD135, LFSD, SIP, DUT-RGBD &#x1F195;, RedWeb-S &#x1F195;, COME &#x1F195;).
-  - [Results of DFM-Net](https://pan.baidu.com/s/1wZyYqYISpRGZATDgKYO4nA?pwd=4jqu).
-  - [Results of DFM-Net*](https://pan.baidu.com/s/1vemT9nfaXoSc_tqSYakSCg?pwd=pax4). 
+Before training/testing our network, please download the training data: 
 
-- Evaluate the result maps:
-	You can evaluate the result maps using the tool in [Matlab Version](http://dpfan.net/d3netbenchmark/) or [Python_GPU Version](https://github.com/zyjwuyan/SOD_Evaluation_Metrics).
-	
- - Note that the parameter file is 8.9Mb, which is 0.4Mb bigger than we report in the paper because keys denoting parameter names also occupy some space. Then put them under the following directory:
- 
-        -dataset\ 
-          -RGBD_train
-          -NJU2K\  
-          -NLPR\
-          ...
-        -pretrain
-          -DFMNet_300_epoch.pth
-          ...
-
-    
-## Training
-- Download [training data](https://pan.baidu.com/s/1ckNlS0uEIPV-iCwVzjutsQ)(eb2z)
-- Modify setting in options.py and run train.py
+* Preprocessed data of 6 datasets: [[Google Drive]](https://drive.google.com/file/d/1czlZyW9_6k3ueS--TDAZK6M7Uv6FpUfO/view?usp=sharing), [[Baidu Pan, 9nxi]](https://pan.baidu.com/s/1a71BlcvX0MTBuP_GGd84WA)
 
 
-##  Application on VSOD &#x1F195;
-- We provide testing results of 4 datasets (DAVIS, FBMS, MCL, DAVSOD).
-  - [Results of DFM-Net](https://pan.baidu.com/s/1jLGP2kV_Z7esOkkY3jKFQw?pwd=58wc).
-  - [Results of DFM-Net*](https://pan.baidu.com/s/1EV4_neyES7jAyo0op-XfTA?pwd=pp2w). 
- 
-## Citation
+Note: if you are blocked by Google and Baidu services, you can contact me via e-mail and I will send you a copy of data and model weights.
 
-Please cite the following paper if you use this repository in your research
+We have processed the data well so you can use them without any preprocessing steps. 
+After completion of downloading, extract the data and put them to `./data/` folder.
+Then, the `./datasets/` folder should contain six folders: `NJU2K/, NLPR/, STERE/, SSD/, SIP/, DUT-RGBD/`, representing `NJU2K, NLPR, STEREO, SSD, SIP, DUTLF-D` datasets, respectively.
 
-	@inproceedings{zhang2021depth,
-  	title={Depth quality-inspired feature manipulation for efficient RGB-D salient object detection},
- 	author={Zhang, Wenbo and Ji, Ge-Peng and Wang, Zhuo and Fu, Keren and Zhao, Qijun},
-  	booktitle={Proceedings of the 29th ACM International Conference on Multimedia},
-  	pages={731--740},
-	year={2021}
-	}
-	
-	@artical{zhang2022depth,
-  	title={Depth Quality-Inspired Feature Manipulation for Efficient RGB-D and Video Salient Object Detection},
- 	author={Zhang, Wenbo and  Fu, Keren and  Wang, Zhuo and Ji, Ge-Peng and Zhao, Qijun},
-  	booktitle={arXiv:2208.03918},
-	year={2022}
-	}
+
+### Train
+
+It is very simple to train our network. We have prepared a script to run the training step:
+```
+bash ./tools/train.sh
+```
+
+### Test
+
+
+#### Pretrained Models
+
+As in our paper, we train our model on the NJU2K_NLPR training set, and test our model on NJU2K_test, NLPR_test, STEREO, SIP, and SSD datasets. For DUTLF-D, we train our model on DUTLF-D training set and evaluate on its testing test.
+
+(Default) Trained on NJU2K_NLPR training set: 
+* Single-scale Training: [[Google Drive]](https://drive.google.com/file/d/1dfyFkdsI1rOfmhmgG-o45ggnOj5Wpr1d/view?usp=sharing), [[Baidu Pan, 9nxi]](https://pan.baidu.com/s/1a71BlcvX0MTBuP_GGd84WA)
+* Multi-scale Training: [[Google Drive]](https://drive.google.com/file/d/1WTRxxO78wx48F3ItfXG8vbSL4IvWanyr/view?usp=sharing), [[Baidu Pan, 9nxi]](https://pan.baidu.com/s/1a71BlcvX0MTBuP_GGd84WA)
+
+(Custom) Training on DUTLF-D training set:
+* Multi-scale Training: [[Google Drive]](https://drive.google.com/file/d/1L26kN_sZkLVDBzh_NOCB-ajkrGJdIovi/view?usp=sharing), [[Baidu Pan, 9nxi]](https://pan.baidu.com/s/1a71BlcvX0MTBuP_GGd84WA)
+
+Download them and put them into the `pretrained/` folder.
+
+
+#### Generate Saliency Maps
+
+After preparing the pretrained models, it is also very simple to generate saliency maps via MobileSal:
+
+```
+bash ./tools/test.sh
+```
+
+The scripts will automatically generate saliency maps on the `maps/` directory.
+
+#### Deployment
+
+The deployment largely speeds up MobileSal with batch size of 1.
+An example script is located at: `tools/test_trt.sh`. Run:
+
+```
+bash ./tools/test_trt.sh
+```
+
+This script will automatically convert PyTorch MobileSal to TensorRT-based MobileSal. Then it will generate saliency maps via the TensorRT-based MobileSal.
+On deployment for real-world applications, you can load the converted TensorRT MobileSal for inference:
+
+```
+from torch2trt import torch2trt, TRTModule
+model = TRTModule(); trt_model_path = "pretrained/mobilesal_trt.pth"
+model.load_state_dict(torch.load(trt_model_path))
+result = model(image, depth) # get result with [torch.Tensor] input
+```
+
+#### Speed Test
+We provide a speed test script on MobileSal:
+
+```
+python speed_test.py
+```
+
+The speed result on a single RTX 2080Ti is as below:
+
+|     Type     | Input  Size    | Batch Size | FP16 | FPS | 
+|-----------------|:---------:|:-----:|:-----:|:-----------:|
+| PyTorch   | 320 x 320 |  20 |  No |     450    |     
+| TensorRT | 320 x 320 |  1 |  No |     420    |    
+| TensorRT | 320 x 320 |  1 |  Yes |     800    |     
+
+
+#### Pretrained Saliency maps
+
+For covenience, we provide the pretrained saliency maps on several datasets as below:
+
+* Single-scale Training: [[Google Drive]](https://drive.google.com/file/d/1UA7zZmMO1Js0Jh9VQwo5JjYRF3qX0y0N/view?usp=sharing), [[Baidu Pan, 9nxi]](https://pan.baidu.com/s/1a71BlcvX0MTBuP_GGd84WA)
+
+* Multi-scale Training: [[Google Drive]](https://drive.google.com/file/d/1-vwtUPh3UWez963IyZNO6HZkGdC3GusL/view?usp=sharing), [[Baidu Pan, 9nxi]](https://pan.baidu.com/s/1a71BlcvX0MTBuP_GGd84WA)
+
+### Others 
+
+#### TODO
+
+1. Release the pretrained models and saliency maps on COME15K dataset.
+2. Add results with the [P2T](https://arxiv.org/abs/2106.12011) transformer backbone.
+
+#### Contact
+
+* I encourage everyone to contact me via my e-mail. My e-mail is: wuyuhuan @ mail.nankai (dot) edu.cn
+
+#### License
+
+The code is released under the [Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International Public License](https://creativecommons.org/licenses/by-nc-sa/4.0/legalcode) for NonCommercial use only.
+
+
+#### Citation
+
+If you are using the code/model/data provided here in a publication, please consider citing our work:
+
+````
+@ARTICLE{wu2021mobilesal,
+  author={Wu, Yu-Huan and Liu, Yun and Xu, Jun and Bian, Jia-Wang and Gu, Yu-Chao and Cheng, Ming-Ming},
+  journal={IEEE Transactions on Pattern Analysis and Machine Intelligence}, 
+  title={MobileSal: Extremely Efficient RGB-D Salient Object Detection}, 
+  year={2022},
+  volume={44},
+  number={12},
+  pages={10261--10269},
+  doi={10.1109/TPAMI.2021.3134684}
+}
+````
+
+
+#### Acknowlogdement
+
+This repository is built under the help of the following five projects for academic use only:
+
+* [PyTorch](https://github.com/pytorch/pytorch)
+
+* [Jittor](https://github.com/Jittor/jittor)
+
+* [torch2trt](https://github.com/NVIDIA-AI-IOT/torch2trt)
