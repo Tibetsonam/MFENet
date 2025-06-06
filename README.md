@@ -12,11 +12,11 @@ My e-mail is:  tibesonam@gmail.com
 [[PDF]](https://ieeexplore.ieee.org/stamp/stamp.jsp?tp=&arnumber=10890388)
 > # Lightweight Multi-Frequency Enhancement Network for RGB-D Video Salient Object Detection
 >
-> Daerji Suolang, Jiahao He, Wangchuk Tsering, Keren Fu, Xiaofeng Li, Qijun Zhao1
+> Daerji Suolang, Jiahao He, Wangchuk Tsering, Keren Fu, Xiaofeng Li, Qijun Zhao
 ><p align="center">
     <img src="images/framework of our lightweight.png" width="80%"/> <br />
  <em> 
-     Block diagram of DFM-Net.
+     Block diagram of MFENet.
     </em>
 </p>
 This repository contains:
