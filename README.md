@@ -58,7 +58,7 @@ python train.py
 ```
 
 # Test
-1. Download the trained model from [[Google Drive]](https://drive.google.com/drive/folders/1QsDPV3cCHoIAnTjnyWl4hRQIjDhoflkW?usp=drive_link) and modify the  `model_path` to its saving path in the `test.py`.
+1. Download the trained model from [[Google Drive]](https://drive.google.com/drive/folders/1QsDPV3cCHoIAnTjnyWl4hRQIjDhoflkW?usp=drive_link) and modify the  `model_path`.
 
 2. Run `python test.py` in the terminal.
 
@@ -78,7 +78,7 @@ The scripts will automatically generate saliency maps on the `maps/` directory.
 We provide a speed test script on MFENet:
 
 ```
-python speed.py
+Run `python speed.py`
 ```
 
 # Others 
