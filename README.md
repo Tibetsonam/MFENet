@@ -44,7 +44,7 @@ Before training/testing our network, please download the training data:
 
 * Download the VSOD DATASETS. (containing DAVIS and DAVSOD) from [Baidu Driver](https://pan.baidu.com/s/1mVtAWJS0eC690nPXav2lwg) (PSW: 7yer).
 * Download the RGB-D DATASETS. (containing NJU2K and NLPR) from [Baidu Driver](https://pan.baidu.com/s/1wI-bxarzdSrOY39UxZaomQ) [PSW: 940i].
-* Download the datasets (RDVS and DVisal) from [Baidu Driver](https://pan.baidu.com/s/1vYEDy4uPbbB20Cvik-oriQ) (PSW: d4ew).
+* Download the RGB-D VSOD datasets (RDVS and DVisal) from [Baidu Driver](https://pan.baidu.com/s/1vYEDy4uPbbB20Cvik-oriQ) (PSW: d4ew).
 
 Note: if you are blocked by Google and Baidu services, you can contact me via e-mail and I will send you a copy of data and model weights.
 
@@ -98,11 +98,4 @@ If you are using the code/model/data provided here in a publication, please cons
   organization={IEEE}
 }
 ````
-
-
-#### Acknowlogdement
-
-This repository is built under the help of the following five projects for academic use only:
-
-* [PyTorch](https://github.com/pytorch/pytorch)
 
