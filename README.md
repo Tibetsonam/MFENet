@@ -10,7 +10,15 @@ If you run into any problems or feel any difficulties to run this code, do not h
 My e-mail is:  tibesonam@gmail.com
 
 [[PDF]](https://ieeexplore.ieee.org/stamp/stamp.jsp?tp=&arnumber=10890388)
-
+> # Lightweight Multi-Frequency Enhancement Network for RGB-D Video Salient Object Detection
+>
+> Daerji Suolang, Jiahao He, Wangchuk Tsering, Keren Fu, Xiaofeng Li, Qijun Zhao1
+><p align="center">
+    <img src="images/framework of our lightweight.png" width="80%"/> <br />
+ <em> 
+     Block diagram of DFM-Net.
+    </em>
+</p>
 This repository contains:
 
 - [x] Full code, data, pretrained models for `training` and `testing`
