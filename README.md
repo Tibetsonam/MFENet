@@ -73,7 +73,7 @@ Run `python test.py` in the terminal.
 
 The scripts will automatically generate saliency maps on the `maps/` directory. 
 ### MFENet Saliency Maps
-Saliency Maps on RDVS, DVisal, ViDSOD datasets: [Google Drive] https://drive.google.com/drive/folders/1kiPtEgTaDltIol_6YZkfO7JlJC0KQ-JX?usp=drive_link
+Saliency Maps on RDVS, DVisal, ViDSOD datasets: [Google Drive](https://drive.google.com/drive/folders/1kiPtEgTaDltIol_6YZkfO7JlJC0KQ-JX?usp=drive_link)
 
 
 ### Speed Test
